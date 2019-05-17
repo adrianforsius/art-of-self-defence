@@ -1,0 +1,14 @@
+{
+    [
+        {
+            id: 1,
+            color: "green",
+            fresh: true,
+        },
+        {
+            id: 2,
+            color: "red",
+            fresh: false,
+        }
+    ]
+}

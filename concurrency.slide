@@ -1,0 +1,209 @@
+The Art of Self Defence:
+Go concurrency for API developers
+
+Adrian Forsius
+Software Engineer at Credijusto
+aforsius@credijusto.com
+@adrianforsius
+
+The slides are available on [[https://github.com/adrianforsius/art-of-self-defence]]
+
+* Notes
+
+Most of the code examples won't run except locally and they've only been tested using Go 1.12
+
+* Go concurrency
+
+1. Concurrency building blocks
+2. Building up a scenario
+3. How to tackle the scenario with concurrency
+4. Conclusions
+5. Questions
+
+* Concurrency and parallelism
+
+Study and work example
+
+Not at any given point in time but simultaniously
+
+Depending on your core(s)
+
+Simple building blocks often complex solution
+
+In the beginning of learning go
+
+* Go routine
+
+Invoked by the *go* statement, run horizontally to the main thread
+
+.play example/goroutine.go
+
+* Go routine
+
+Functions are first class citizens so we can also define the function before
+
+.play example/goroutine1.go
+
+* Channels
+
+A channel in Go provides a connection between two goroutines, allowing them to communicate.
+
+.code example/channels.go /START1/,/STOP1/
+.code example/channels.go /START2/,/STOP2/
+.code example/channels.go /START3/,/STOP3/
+
+* Channels
+
+Anything can be sent on the channel, like our Apple
+
+.code example/channels1.go /START1/,/STOP1/
+.code example/channels1.go /START2/,/STOP2/
+.code example/channels1.go /START3/,/STOP3/
+.code example/channels1.go /START4/,/STOP4/
+.code example/channels1.go /START5/,/STOP5/
+
+* Communication
+
+.image img/go-channel.jpg _ 700
+
+* Communication
+
+Hello world communicated between two go routines
+
+.play example/communication.go /START1/,/STOP1/
+
+* Select statement
+
+A select statement is like a switch, but it selects over communication operations
+
+Selects are great for adding control structure to our go routines
+
+.code example/select.go /START0/,/STOP0/
+
+* Range statement
+
+When we range over a channel, it will continue to loop until the channel is closed
+
+.code example/range.go /START1/,/STOP1/
+
+* Range statement
+
+The range statement can be used for a lot of use cases but its tricky when working with go routines, since go routines are independent
+
+We need to know the state of all go routines in order to use range
+
+Often easier to listen for all expected response and defer a channel close
+
+* Fan-in
+
+.image img/gophermegaphones.jpg
+
+* Problematic API
+
+* Fruit API
+
+ /apple/{id}    - get individual apple endpoint
+
+ /apple/        - get list of apples
+
+
+* Example responses
+
+Apple
+.code example/apple.json
+
+Apples
+.code example/apples.json
+
+* Ideal response
+
+Apples
+.code example/apples-ideal.json
+
+Or even better if we could filter the apple collection directly like:
+
+ /apples/?fresh=true
+
+* Problem statement
+
+We have an API that doesn't return the details for a collection
+
+We have no power over the API since its 3:rd part
+
+We are dependent on this API for our product to work
+
+* Approaches
+
+Wait and hope they fix their API
+
+or
+
+Make a cache by regular crawling their API
+
+or
+
+*Query* `/fruit` *for* *each* *item* *in* *the* *list* *concurrently*
+
+* Approach - concurrency
+
+What do we need?
+- Get the list of apples
+- Make a request for each apple in the list
+- Run them concurrently and collect the result with a fan-in
+- Merge the result and return to our caller
+- ???
+- Profit
+
+* Request every item
+
+.code example/api.go /START1/,/STOP1/
+
+Not very exciting but remember we do two calls to the api:
+- Get the list (here)
+- Make concurrent request for each item in the list
+
+* Fan-in
+
+.code example/api-fanin.go /START2/,/STOP2/
+
+.code example/api-fanin.go /START3/,/STOP3/
+
+.code example/api-fanin.go /START4/,/STOP4/
+
+* Issues
+
+.code example/api-fanin-probs.go /START3/,/STOP3/
+
+.code example/api-fanin-probs.go /START4/,/STOP4/
+
+* Timeout request
+
+When do we want to timeout?
+- The requests are taking too long
+- One of the requests failed
+
+We need to communicate with our go routines telling them about the problem so the can stop executing
+
+* Timeout
+
+.code example/timeout.go /START1/,/STOP1/
+
+* Timeout
+
+.code example/timeout.go /START2/,/STOP2/
+
+* Problems and improvements
+
+ Concurrent request but we have to wait it out
+
+- We can listen to a channel implemented as signaler to cancel our go routine
+- We can listen to context and use that as signaler to cancel our go request
+
+ We group all individual errors as one
+
+- We define a new type carrying the errors that we can collect and return
+
+
+* Questions?
+
+.image img/party-gopher.png _ 300

@@ -1,0 +1,12 @@
+Go concurrency
+
+what is this talk about?
+My name is Adrian Forsius and I'm going to talk about Go and its concurrency, my goal with this talk is to give you a basic understanding of go routines so you can leverage this knowledege in your everyday life. This talk will be in English because I'm more comfortable that way, however I speak an OK amount of spanish so if you have any questions any of these languages are fine.
+
+Who am I?
+I am a Software engineer (here?) at Credijusto, I've been developming professionally since 2011. I started wiriting Go code in the end of 2016 which is essentially when I became a full time Gopher. I'm a Swede and I've been living here in CDMX since November 2016. **make a joke**?
+
+So now when we have covered the practical parts of the presentation lets get to it.
+
+Go channels:
+To write concurrent code in go we start with channels
