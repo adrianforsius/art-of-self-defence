@@ -14,7 +14,7 @@ func main() {
 		for {
 			select {
 			case s := <-c: // HL
-				time.Sleep(time.Second)
+				time.Sleep(300 * time.Millisecond)
 				fmt.Println(s)
 				c <- "ping" // HL
 			}
@@ -24,7 +24,7 @@ func main() {
 		for {
 			select {
 			case s := <-c: // HL
-				time.Sleep(time.Second)
+				time.Sleep(300 * time.Millisecond)
 				fmt.Println(s)
 				c <- "pong" // HL
 			}

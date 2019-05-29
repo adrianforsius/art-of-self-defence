@@ -20,17 +20,18 @@ Most of the code examples won't run except locally and they've only been tested 
 4. Conclusions
 5. Questions
 
-* Concurrency and parallelism
+* Study and work example
 
-Study and work example
+.image img/oxxo.png
+
+* Concurrency and parallelism
 
 Not at any given point in time but simultaniously
 
 Depending on your core(s)
 
-Simple building blocks often complex solution
+Simple building blocks but often complex solution
 
-In the beginning of learning go
 
 * Go routine
 
@@ -84,15 +85,7 @@ Selects are great for adding control structure to our go routines
 
 When we range over a channel, it will continue to loop until the channel is closed
 
-.code example/range.go /START1/,/STOP1/
-
-* Range statement
-
-The range statement can be used for a lot of use cases but its tricky when working with go routines, since go routines are independent
-
-We need to know the state of all go routines in order to use range
-
-Often easier to listen for all expected response and defer a channel close
+.play example/range.go /START1/,/STOP1/
 
 * Fan-in
 
@@ -105,6 +98,14 @@ Often easier to listen for all expected response and defer a channel close
  /apple/{id}    - get individual apple endpoint
 
  /apple/        - get list of apples
+
+In our example our static API:
+
+ /apples         - list of apple 1 and 2
+
+ /apple/1        - apple 1 (fresh apple)
+
+ /apple/2        - apple 2 (rotten apple)
 
 
 * Example responses
@@ -176,6 +177,8 @@ Not very exciting but remember we do two calls to the api:
 
 .code example/api-fanin-probs.go /START4/,/STOP4/
 
+* Example
+
 * Timeout request
 
 When do we want to timeout?
@@ -190,7 +193,7 @@ We need to communicate with our go routines telling them about the problem so th
 
 * Timeout
 
-.code example/timeout.go /START2/,/STOP2/
+.play example/timeout.go /START2/,/STOP2/
 
 * Problems and improvements
 
@@ -198,11 +201,6 @@ We need to communicate with our go routines telling them about the problem so th
 
 - We can listen to a channel implemented as signaler to cancel our go routine
 - We can listen to context and use that as signaler to cancel our go request
-
- We group all individual errors as one
-
-- We define a new type carrying the errors that we can collect and return
-
 
 * Questions?
 

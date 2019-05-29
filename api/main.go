@@ -15,24 +15,24 @@ type Apple struct {
 }
 
 func appleHandler1(w http.ResponseWriter, r *http.Request) {
-	log.Printf("apple handler 1 called")
 	apple := Apple{
 		ID:    1,
 		Fresh: true,
 		Color: "green",
 	}
 	b, _ := json.Marshal(apple)
+	log.Printf("apple handler 1 called returning apple %v", apple)
 	w.Write(b)
 }
 
 func appleHandler2(w http.ResponseWriter, r *http.Request) {
-	log.Printf("apple handler 2 called")
 	apple := Apple{
 		ID:    2,
-		Fresh: true,
+		Fresh: false,
 		Color: "red",
 	}
 	b, _ := json.Marshal(apple)
+	log.Printf("apple handler 2 called returning apple %v", apple)
 	w.Write(b)
 }
 
@@ -51,6 +51,7 @@ func applesHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 	b, _ := json.Marshal(apples)
+	log.Printf("%s", b)
 	w.Write(b)
 }
 

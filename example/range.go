@@ -5,8 +5,7 @@ import "fmt"
 
 func main() {
 	// START1 OMIT
-	// Make
-	queue := make(chan string)
+	queue := make(chan string, 2)
 	queue <- "one"
 	queue <- "two"
 	close(queue)

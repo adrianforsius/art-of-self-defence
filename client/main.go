@@ -27,9 +27,9 @@ func main() {
 	}
 	apples, err := c.FreshApples()
 	if err != nil {
-		log.Printf("error getting apples %s", err)
+		log.Printf("error getting apples %s, %v", err, apples)
 	}
-	fmt.Print("My resp %v", apples)
+	fmt.Printf("My fresh resp %v\n", apples)
 }
 
 type Client struct {
@@ -53,7 +53,7 @@ func (c *Client) Apples() ([]Apple, error) {
 
 func (c *Client) Apple(id int) (Apple, error) {
 	var a Apple
-	resp, err := http.Get(url + "/apple")
+	resp, err := http.Get(fmt.Sprintf("%s/%s/%d", url, "/apple", id))
 	if err != nil {
 		return a, err
 	}
